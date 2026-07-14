@@ -12,7 +12,6 @@ require (
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/onsi/ginkgo v1.16.5
 	github.com/onsi/gomega v1.42.1
-	github.com/yandex-cloud/k8s-csi-s3 v0.43.7
 	google.golang.org/grpc v1.82.0
 	k8s.io/mount-utils v0.36.2
 )
@@ -27,6 +26,7 @@ require (
 	github.com/klauspost/compress v1.19.0 // indirect
 	github.com/klauspost/cpuid/v2 v2.4.0 // indirect
 	github.com/klauspost/crc32 v1.3.0 // indirect
+	github.com/kr/text v0.2.0 // indirect
 	github.com/minio/crc64nvme v1.1.1 // indirect
 	github.com/minio/md5-simd v1.1.2 // indirect
 	github.com/moby/sys/mountinfo v0.7.2 // indirect

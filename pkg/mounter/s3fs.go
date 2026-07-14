@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/yandex-cloud/k8s-csi-s3/pkg/s3"
+	"github.com/isityael/k8s-csi-s3/pkg/s3"
 )
 
 // Implements Mounter

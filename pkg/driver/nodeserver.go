@@ -25,8 +25,8 @@ import (
 	"strconv"
 
 	"github.com/golang/glog"
-	"github.com/yandex-cloud/k8s-csi-s3/pkg/mounter"
-	"github.com/yandex-cloud/k8s-csi-s3/pkg/s3"
+	"github.com/isityael/k8s-csi-s3/pkg/mounter"
+	"github.com/isityael/k8s-csi-s3/pkg/s3"
 	mount "k8s.io/mount-utils"
 
 	"github.com/container-storage-interface/spec/lib/go/csi"

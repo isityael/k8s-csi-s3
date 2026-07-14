@@ -13,7 +13,7 @@ COPY cmd ./cmd
 COPY pkg ./pkg
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
     go build -trimpath -a \
-      -ldflags "-s -w -extldflags '-static' -X github.com/yandex-cloud/k8s-csi-s3/pkg/driver.vendorVersion=${IMAGE_VERSION}" \
+      -ldflags "-s -w -extldflags '-static' -X github.com/isityael/k8s-csi-s3/pkg/driver.vendorVersion=${IMAGE_VERSION}" \
       -o /out/s3driver ./cmd/s3driver
 
 FROM ${RUNTIME_BASE} AS geesefs
