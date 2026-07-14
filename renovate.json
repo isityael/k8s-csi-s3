@@ -1,0 +1,58 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "local>isityael/infra//.github/renovate/base.json",
+    "config:best-practices",
+    ":preserveSemverRanges"
+  ],
+  "baseBranchPatterns": [
+    "isityael/dhi-hardening"
+  ],
+  "enabledManagers": [
+    "gomod",
+    "dockerfile",
+    "github-actions",
+    "woodpecker",
+    "custom.regex"
+  ],
+  "github-actions": {
+    "managerFilePatterns": [
+      "/(^|/)\\.github/workflows/.*\\.ya?ml$/",
+      "/(^|/)\\.forgejo/workflows/.*\\.ya?ml$/"
+    ]
+  },
+  "postUpdateOptions": [
+    "gomodTidy"
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Track the pinned GeeseFS release used by production and test images",
+      "managerFilePatterns": [
+        "/(^|/)Dockerfile$/",
+        "/(^|/)test/Dockerfile$/"
+      ],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>[a-z-]+) packageName=(?<packageName>[^\\s]+)\\nARG GEESEFS_VERSION=(?<currentValue>v[^\\s]+)"
+      ]
+    }
+  ],
+  "packageRules": [
+    {
+      "description": "Label Go dependency updates",
+      "matchManagers": ["gomod"],
+      "addLabels": ["dependencies", "go"],
+      "constraintsFiltering": "strict"
+    },
+    {
+      "description": "Keep Docker and CI updates reviewable",
+      "matchManagers": ["dockerfile", "github-actions", "woodpecker", "custom.regex"],
+      "addLabels": ["dependencies", "supply-chain"]
+    },
+    {
+      "description": "Group Forgejo Actions updates",
+      "matchManagers": ["github-actions"],
+      "groupName": "forgejo actions"
+    }
+  ]
+}

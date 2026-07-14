@@ -1,0 +1,75 @@
+when:
+  - event: tag
+    ref: refs/tags/v*-ym*
+
+steps:
+  - name: build-candidate
+    image: woodpeckerci/plugin-docker-buildx:6.0.4@sha256:765ebfaa6f71383197babb2352c7902bafe141e6232a62cafb740510a788c550
+    privileged: true
+    settings:
+      registry: ghcr.io
+      repo: ghcr.io/isityael/csi-s3-driver
+      dockerfile: Dockerfile
+      platforms:
+        - linux/amd64
+      tags:
+        - candidate-${CI_COMMIT_SHA}
+      build_args:
+        IMAGE_VERSION: "${CI_COMMIT_TAG}"
+        VCS_REF: "${CI_COMMIT_SHA}"
+      logins:
+        - registry: ghcr.io
+          username:
+            from_secret: github_username
+          password:
+            from_secret: github_token
+        - registry: dhi.io
+          username:
+            from_secret: dhi_username
+          password:
+            from_secret: dhi_password
+      provenance: mode=max
+      cache_from: 'type=registry\,ref=ghcr.io/isityael/csi-s3-driver:buildcache'
+      cache_to: 'type=registry,ref=ghcr.io/isityael/csi-s3-driver:buildcache,mode=max,ignore-error=true'
+
+  - name: scan-candidate
+    image: dhi.io/trivy:0.71.2-alpine3.24-dev@sha256:bcf73f601798dcfa74c9d3a8ddd3cf596023fb6b30bd8d7b114c2610cbd03a8b
+    environment:
+      TRIVY_USERNAME:
+        from_secret: github_username
+      TRIVY_PASSWORD:
+        from_secret: github_token
+    commands:
+      - trivy image --exit-code 1 --severity HIGH,CRITICAL --ignore-unfixed "ghcr.io/isityael/csi-s3-driver:candidate-$${CI_COMMIT_SHA}"
+
+  - name: promote-release
+    image: dhi.io/crane:0.21.7-debian13-dev@sha256:4810294e79d3d8f102dd2eb9be16615a1502c894fd69229813f64c556559bb25
+    environment:
+      GHCR_USERNAME:
+        from_secret: github_username
+      GHCR_TOKEN:
+        from_secret: github_token
+    commands:
+      - printf '%s' "$${GHCR_TOKEN}" | crane auth login ghcr.io -u "$${GHCR_USERNAME}" --password-stdin
+      - candidate="ghcr.io/isityael/csi-s3-driver:candidate-$${CI_COMMIT_SHA}"
+      - release="ghcr.io/isityael/csi-s3-driver:$${CI_COMMIT_TAG}"
+      - version="ghcr.io/isityael/csi-s3-driver:$${CI_COMMIT_TAG#v}"
+      - crane copy "$${candidate}" "$${release}"
+      - crane copy "$${candidate}" "$${version}"
+
+  - name: sign-release
+    image: dhi.io/cosign:3.1.1-alpine3.24-dev@sha256:7b553a9079e2a42fac0a481f91b6803bcc166f5f7770c36d6a97570f4f376c44
+    environment:
+      COSIGN_KEY:
+        from_secret: cosign_key
+      COSIGN_PASSWORD:
+        from_secret: cosign_password
+      REGISTRY_USERNAME:
+        from_secret: github_username
+      REGISTRY_PASSWORD:
+        from_secret: github_token
+    commands:
+      - printf '%s' "$${COSIGN_KEY}" > /tmp/cosign.key
+      - cosign login ghcr.io -u "$${REGISTRY_USERNAME}" -p "$${REGISTRY_PASSWORD}"
+      - cosign sign --key /tmp/cosign.key --yes --registry-referrers-mode=oci-1-1 "ghcr.io/isityael/csi-s3-driver:$${CI_COMMIT_TAG}"
+      - rm -f /tmp/cosign.key
