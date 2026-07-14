@@ -24,7 +24,7 @@ ARG GEESEFS_SOURCE_SHA256=66383e8a6162e389037135482e93ebe6d04fb0451f98e081d87b08
 # renovate: datasource=go packageName=golang.org/x/crypto
 ARG GEESEFS_X_CRYPTO_VERSION=v0.52.0
 # renovate: datasource=go packageName=golang.org/x/net
-ARG GEESEFS_X_NET_VERSION=v0.55.0
+ARG GEESEFS_X_NET_VERSION=v0.57.0
 
 RUN apk add --no-cache ca-certificates=20260611-r0 curl=8.21.0-r0 && \
     curl --fail --location --silent --show-error \
