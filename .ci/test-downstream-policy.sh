@@ -113,6 +113,15 @@ assert_contains "$woodpecker_validate" 'make test' 'Woodpecker runs the complete
 assert_file "$woodpecker" 'Woodpecker release pipeline exists'
 assert_contains "$woodpecker" 'linux/amd64' 'Woodpecker publishes only linux/amd64'
 assert_contains "$woodpecker" 'ghcr\.io/isityael/csi-s3-driver' 'Woodpecker publishes the owned GHCR image'
+assert_contains "$woodpecker" 'COSIGN_EXPERIMENTAL: "1"' 'Woodpecker enables OCI 1.1 Cosign referrers'
+assert_contains "$woodpecker" 'cosign verify' 'Woodpecker verifies the candidate signature'
+sign_line="$(grep -n -- 'name: sign-candidate' "$woodpecker" | cut -d: -f1)"
+promote_line="$(grep -n -- 'name: promote-release' "$woodpecker" | cut -d: -f1)"
+if [ -n "$sign_line" ] && [ -n "$promote_line" ] && [ "$sign_line" -lt "$promote_line" ]; then
+  pass 'Woodpecker signs before publishing release tags'
+else
+  fail 'Woodpecker signs before publishing release tags'
+fi
 
 printf '\nPolicy checks: %s passed, %s failed\n' "$passed" "$failed"
 [ "$failed" -eq 0 ]

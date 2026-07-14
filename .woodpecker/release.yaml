@@ -45,6 +45,27 @@ steps:
     commands:
       - trivy image --exit-code 1 --severity HIGH,CRITICAL --ignore-unfixed "ghcr.io/isityael/csi-s3-driver:candidate-$${CI_COMMIT_SHA}"
 
+  - name: sign-candidate
+    image: dhi.io/cosign:3.1.1-alpine3.24-dev@sha256:7b553a9079e2a42fac0a481f91b6803bcc166f5f7770c36d6a97570f4f376c44
+    environment:
+      COSIGN_EXPERIMENTAL: "1"
+      COSIGN_KEY:
+        from_secret: cosign_key
+      COSIGN_PASSWORD:
+        from_secret: cosign_password
+      REGISTRY_USERNAME:
+        from_secret: github_username
+      REGISTRY_PASSWORD:
+        from_secret: github_token
+    commands:
+      - printf '%s' "$${COSIGN_KEY}" > /tmp/cosign.key
+      - cosign login ghcr.io -u "$${REGISTRY_USERNAME}" -p "$${REGISTRY_PASSWORD}"
+      - cosign public-key --key /tmp/cosign.key > /tmp/cosign.pub
+      - candidate="ghcr.io/isityael/csi-s3-driver:candidate-$${CI_COMMIT_SHA}"
+      - cosign sign --key /tmp/cosign.key --yes --registry-referrers-mode=oci-1-1 "$${candidate}"
+      - cosign verify --key /tmp/cosign.pub --registry-referrers-mode=oci-1-1 "$${candidate}"
+      - rm -f /tmp/cosign.key /tmp/cosign.pub
+
   - name: promote-release
     image: dhi.io/crane:0.21.7-debian13-dev@sha256:4810294e79d3d8f102dd2eb9be16615a1502c894fd69229813f64c556559bb25
     environment:
@@ -59,20 +80,3 @@ steps:
       - version="ghcr.io/isityael/csi-s3-driver:$${CI_COMMIT_TAG#v}"
       - crane copy "$${candidate}" "$${release}"
       - crane copy "$${candidate}" "$${version}"
-
-  - name: sign-release
-    image: dhi.io/cosign:3.1.1-alpine3.24-dev@sha256:7b553a9079e2a42fac0a481f91b6803bcc166f5f7770c36d6a97570f4f376c44
-    environment:
-      COSIGN_KEY:
-        from_secret: cosign_key
-      COSIGN_PASSWORD:
-        from_secret: cosign_password
-      REGISTRY_USERNAME:
-        from_secret: github_username
-      REGISTRY_PASSWORD:
-        from_secret: github_token
-    commands:
-      - printf '%s' "$${COSIGN_KEY}" > /tmp/cosign.key
-      - cosign login ghcr.io -u "$${REGISTRY_USERNAME}" -p "$${REGISTRY_PASSWORD}"
-      - cosign sign --key /tmp/cosign.key --yes --registry-referrers-mode=oci-1-1 "ghcr.io/isityael/csi-s3-driver:$${CI_COMMIT_TAG}"
-      - rm -f /tmp/cosign.key
