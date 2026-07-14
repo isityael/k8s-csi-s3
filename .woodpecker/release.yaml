@@ -63,7 +63,7 @@ steps:
       - cosign public-key --key /tmp/cosign.key > /tmp/cosign.pub
       - candidate="ghcr.io/isityael/csi-s3-driver:candidate-$${CI_COMMIT_SHA}"
       - cosign sign --key /tmp/cosign.key --yes --registry-referrers-mode=oci-1-1 "$${candidate}"
-      - cosign verify --key /tmp/cosign.pub --registry-referrers-mode=oci-1-1 "$${candidate}"
+      - cosign verify --key /tmp/cosign.pub --experimental-oci11 "$${candidate}"
       - rm -f /tmp/cosign.key /tmp/cosign.pub
 
   - name: promote-release
