@@ -7,6 +7,7 @@ dockerfile="$repo_root/Dockerfile"
 renovate="$repo_root/renovate.json"
 actions="$repo_root/.forgejo/workflows/validate.yaml"
 woodpecker="$repo_root/.woodpecker/release.yaml"
+woodpecker_validate="$repo_root/.woodpecker/validate.yaml"
 
 passed=0
 failed=0
@@ -82,7 +83,9 @@ assert_contains "$renovate" '"gomod"' 'Renovate enables the gomod manager for go
 assert_contains "$renovate" '"dockerfile"' 'Renovate enables Dockerfile dependency updates'
 assert_file "$actions" 'Forgejo Actions validation workflow exists'
 assert_contains "$actions" 'go mod verify' 'Forgejo Actions verifies Go module content'
-assert_contains "$actions" 'go test ./\.\.\.' 'Forgejo Actions runs the complete Go test suite'
+assert_contains "$actions" 'go test ./\.\.\. -run' 'Forgejo Actions compiles the complete Go test suite'
+assert_file "$woodpecker_validate" 'Woodpecker validation pipeline exists'
+assert_contains "$woodpecker_validate" 'make test' 'Woodpecker runs the complete privileged CSI suite'
 assert_file "$woodpecker" 'Woodpecker release pipeline exists'
 assert_contains "$woodpecker" 'linux/amd64' 'Woodpecker publishes only linux/amd64'
 assert_contains "$woodpecker" 'ghcr\.io/isityael/csi-s3-driver' 'Woodpecker publishes the owned GHCR image'

@@ -35,6 +35,3 @@ jobs:
 
       - name: Compile all tests
         run: go test ./... -run '^$'
-
-      - name: Run complete privileged CSI suite
-        run: make test

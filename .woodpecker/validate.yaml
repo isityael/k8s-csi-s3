@@ -1,0 +1,25 @@
+when:
+  - event: push
+    branch: isityael/dhi-hardening
+  - event: manual
+
+steps:
+  - name: docker
+    image: docker:29.6.1-dind@sha256:e800743c1d2f29578f32ae4cf0ec1e20673f64ba5e2d34588f0ee8998a34a74b
+    detach: true
+    privileged: true
+    environment:
+      DOCKER_TLS_CERTDIR: ""
+    commands:
+      - dockerd-entrypoint.sh --host=tcp://0.0.0.0:2375 --tls=false
+
+  - name: privileged-csi-suite
+    image: docker:29.6.1-cli@sha256:a011361b7e7dbf51ba0db930a7b746a0bb80935ac1b2f5d892a989025c80fab6
+    environment:
+      DOCKER_HOST: tcp://docker:2375
+    commands:
+      - apk add --no-cache make
+      - until docker info >/dev/null 2>&1; do sleep 1; done
+      - make test
+    depends_on:
+      - docker
