@@ -16,18 +16,31 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
       -ldflags "-s -w -extldflags '-static' -X github.com/isityael/k8s-csi-s3/pkg/driver.vendorVersion=${IMAGE_VERSION}" \
       -o /out/s3driver ./cmd/s3driver
 
-FROM ${RUNTIME_BASE} AS geesefs
+FROM ${GO_BASE} AS geesefs
 
 # renovate: datasource=github-releases packageName=yandex-cloud/geesefs
 ARG GEESEFS_VERSION=v0.43.8
-ARG GEESEFS_SHA256=81dd5a9035669ec4bdecf1f54bf6368ecad66258700e2f99e722770c71e5e7f4
+ARG GEESEFS_SOURCE_SHA256=66383e8a6162e389037135482e93ebe6d04fb0451f98e081d87b089c94fb7ec0
+# renovate: datasource=go packageName=golang.org/x/crypto
+ARG GEESEFS_X_CRYPTO_VERSION=v0.52.0
+# renovate: datasource=go packageName=golang.org/x/net
+ARG GEESEFS_X_NET_VERSION=v0.55.0
 
 RUN apk add --no-cache ca-certificates=20260611-r0 curl=8.21.0-r0 && \
     curl --fail --location --silent --show-error \
-      "https://github.com/yandex-cloud/geesefs/releases/download/${GEESEFS_VERSION}/geesefs-linux-amd64" \
-      --output /usr/bin/geesefs && \
-    echo "${GEESEFS_SHA256}  /usr/bin/geesefs" | sha256sum -c - && \
-    chmod 0755 /usr/bin/geesefs
+      "https://github.com/yandex-cloud/geesefs/archive/refs/tags/${GEESEFS_VERSION}.tar.gz" \
+      --output /tmp/geesefs.tar.gz && \
+    echo "${GEESEFS_SOURCE_SHA256}  /tmp/geesefs.tar.gz" | sha256sum -c - && \
+    mkdir /src && \
+    tar -xzf /tmp/geesefs.tar.gz -C /src --strip-components=1
+
+WORKDIR /src
+RUN go mod edit \
+      -require=golang.org/x/crypto@${GEESEFS_X_CRYPTO_VERSION} \
+      -require=golang.org/x/net@${GEESEFS_X_NET_VERSION} && \
+    CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -mod=mod -trimpath \
+      -ldflags "-s -w -X main.Version=${GEESEFS_VERSION}-ym1" \
+      -o /out/geesefs .
 
 FROM ${RUNTIME_BASE}
 
@@ -51,7 +64,7 @@ RUN apk add --no-cache \
       rclone=${RCLONE_VERSION} \
       s3fs-fuse=${S3FS_FUSE_VERSION}
 
-COPY --from=geesefs /usr/bin/geesefs /usr/bin/geesefs
+COPY --from=geesefs /out/geesefs /usr/bin/geesefs
 COPY --from=gobuild /out/s3driver /s3driver
 
 ENTRYPOINT ["/s3driver"]

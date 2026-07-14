@@ -35,6 +35,17 @@
       "matchStrings": [
         "# renovate: datasource=(?<datasource>[a-z-]+) packageName=(?<packageName>[^\\s]+)\\nARG GEESEFS_VERSION=(?<currentValue>v[^\\s]+)"
       ]
+    },
+    {
+      "customType": "regex",
+      "description": "Track GeeseFS dependency security overrides",
+      "managerFilePatterns": [
+        "/(^|/)Dockerfile$/"
+      ],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>go) packageName=(?<packageName>golang\\.org/x/crypto)\\nARG GEESEFS_X_CRYPTO_VERSION=(?<currentValue>v[^\\s]+)",
+        "# renovate: datasource=(?<datasource>go) packageName=(?<packageName>golang\\.org/x/net)\\nARG GEESEFS_X_NET_VERSION=(?<currentValue>v[^\\s]+)"
+      ]
     }
   ],
   "packageRules": [

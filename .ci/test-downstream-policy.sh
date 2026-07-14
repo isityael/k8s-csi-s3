@@ -65,8 +65,16 @@ assert_contains "$dockerfile" '^ARG RUNTIME_BASE=dhi\.io/alpine-base:3\.24-dev@s
   'runtime uses a digest-pinned DHI Alpine 3.24 dev image'
 assert_contains "$dockerfile" '^ARG GEESEFS_VERSION=v[0-9]+\.[0-9]+\.[0-9]+$' \
   'GeeseFS uses an explicit release'
-assert_contains "$dockerfile" '^ARG GEESEFS_SHA256=[a-f0-9]{64}$' \
-  'GeeseFS has an explicit SHA-256'
+assert_contains "$dockerfile" '^ARG GEESEFS_SOURCE_SHA256=[a-f0-9]{64}$' \
+  'GeeseFS source has an explicit SHA-256'
+assert_contains "$dockerfile" '^ARG GEESEFS_X_CRYPTO_VERSION=v[0-9]+\.[0-9]+\.[0-9]+$' \
+  'GeeseFS x/crypto security override is pinned'
+assert_contains "$dockerfile" '^ARG GEESEFS_X_NET_VERSION=v[0-9]+\.[0-9]+\.[0-9]+$' \
+  'GeeseFS x/net security override is pinned'
+assert_contains "$dockerfile" 'CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build' \
+  'GeeseFS is built from verified source'
+assert_contains "$dockerfile" 'main\.Version=\$\{GEESEFS_VERSION\}-ym1' \
+  'GeeseFS embeds the maintained source version'
 assert_contains "$dockerfile" '^ARG RCLONE_VERSION=[0-9]+\.[0-9]+\.[0-9]+-r[0-9]+$' \
   'rclone package version is pinned'
 assert_contains "$dockerfile" '^ARG S3FS_FUSE_VERSION=[0-9]+\.[0-9]+-r[0-9]+$' \
@@ -77,6 +85,8 @@ assert_not_contains "$dockerfile" '(:latest|/latest/|alpine/edge)' \
   'Dockerfile contains no latest tag, latest download, or Alpine edge repository'
 assert_not_contains "$dockerfile" '^[[:space:]]*ADD[[:space:]]+https?://' \
   'Dockerfile does not use an unverified remote ADD'
+assert_not_contains "$dockerfile" 'releases/download/.*/geesefs-linux-amd64' \
+  'Dockerfile does not consume the vulnerable upstream GeeseFS binary'
 assert_not_contains "$dockerfile" 'github\.com/yandex-cloud/k8s-csi-s3' \
   'Dockerfile links version metadata into the downstream module'
 
