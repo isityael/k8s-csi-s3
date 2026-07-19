@@ -67,7 +67,7 @@ steps:
       - rm -f /tmp/cosign.key /tmp/cosign.pub
 
   - name: promote-release
-    image: dhi.io/crane:0.21.7-debian13-dev@sha256:99a000607e2df4f84cfe99d7810c5488fd972eb9e6009ae75d9889a5f209e5bc
+    image: dhi.io/crane:0.21.7-debian13-dev@sha256:9e10a9ed1d204f70873bd656d9d823f63ff0e9d138261fa34d85155499e1d982
     environment:
       GHCR_USERNAME:
         from_secret: github_username
