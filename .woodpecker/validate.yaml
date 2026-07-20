@@ -7,7 +7,7 @@ when:
 
 services:
   docker:
-    image: docker:29.6.2-dind@sha256:eb37f58646a901dc7727cf448cae36daaefaba79de33b5058dab79aa4c04aefb
+    image: docker:29.6.2-dind@sha256:bfec1f5159c63a81ca6fdedbd81404d2c0e16378ed0feec3bb3fbf3998847659
     privileged: true
     environment:
       DOCKER_TLS_CERTDIR: ""
