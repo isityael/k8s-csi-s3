@@ -46,7 +46,7 @@ steps:
       - trivy image --exit-code 1 --severity HIGH,CRITICAL --ignore-unfixed "ghcr.io/isityael/csi-s3-driver:candidate-$${CI_COMMIT_SHA}"
 
   - name: sign-candidate
-    image: dhi.io/cosign:3.1.1-alpine3.24-dev@sha256:550a347384783c1dd4c710155450e28e2db1af4f1fa95be23ea570de69f1871f
+    image: dhi.io/cosign:3.1.2-alpine3.24-dev@sha256:c82c7d335b7f6a73f480d6f79bc78ef34b6366238e5cdbbc26b9c3e21dba22f0
     environment:
       COSIGN_EXPERIMENTAL: "1"
       COSIGN_KEY:
