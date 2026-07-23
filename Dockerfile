@@ -1,5 +1,5 @@
-ARG GO_BASE=dhi.io/golang:1.26.5-alpine3.24-dev@sha256:711ea0b8f09f549c50f2f550dc26859d3e6441ca11d5640caecf69c29a862f0c
-ARG RUNTIME_BASE=dhi.io/alpine-base:3.24-dev@sha256:74230b37711de2e5cbc42b8fbd0bb019417ce99b05e5792390d75cb6c948a560
+ARG GO_BASE=dhi.io/golang:1.26.5-alpine3.24-dev@sha256:994b8bb183c3206ad14b8f71ca8b13cfcfdb793e9afe6565ed3d576e2fed546e
+ARG RUNTIME_BASE=dhi.io/alpine-base:3.24-dev@sha256:4e00dbff1ea0f37d1c8a1f9c3d4938e5b74b33c715ad2baba9a3cd674d24b859
 
 FROM ${GO_BASE} AS gobuild
 
