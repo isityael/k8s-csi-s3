@@ -1,4 +1,5 @@
 when:
+  - event: pull_request
   - event: push
     branch: isityael/dhi-hardening
   - event: tag
