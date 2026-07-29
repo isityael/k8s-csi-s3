@@ -36,7 +36,7 @@ steps:
       cache_to: 'type=registry,ref=ghcr.io/isityael/csi-s3-driver:buildcache,mode=max,ignore-error=true'
 
   - name: scan-candidate
-    image: dhi.io/trivy:0.71.2-alpine3.24-dev@sha256:4186bf2957fcf1dc9e7cfe4f2b255db9bd02919b813c263e606c0ea8a4f09761
+    image: dhi.io/trivy:0.71.2-alpine3.24-dev@sha256:111c2d07f6a936c6429f5bb551899cdd662917b754ae5effcdd45c447cb5b5ab
     environment:
       TRIVY_USERNAME:
         from_secret: github_username
@@ -46,7 +46,7 @@ steps:
       - trivy image --exit-code 1 --severity HIGH,CRITICAL --ignore-unfixed "ghcr.io/isityael/csi-s3-driver:candidate-$${CI_COMMIT_SHA}"
 
   - name: sign-candidate
-    image: dhi.io/cosign:3.1.2-alpine3.24-dev@sha256:916c73f5b5f3bfb27dac777b9933eb3cf2df02929d23da725cbdd12cc3b54f27
+    image: dhi.io/cosign:3.1.2-alpine3.24-dev@sha256:28bd97f1efc751593b4d75d4d92880353bf77ee43f8db391f704b699b7cce43e
     environment:
       COSIGN_EXPERIMENTAL: "1"
       COSIGN_KEY:
@@ -67,7 +67,7 @@ steps:
       - rm -f /tmp/cosign.key /tmp/cosign.pub
 
   - name: promote-release
-    image: dhi.io/crane:0.21.7-debian13-dev@sha256:9e10a9ed1d204f70873bd656d9d823f63ff0e9d138261fa34d85155499e1d982
+    image: dhi.io/crane:0.21.7-debian13-dev@sha256:5c8e6a602d0c668812c6645de88af5b1d69c1a1faa4b05facecd6678371f38b7
     environment:
       GHCR_USERNAME:
         from_secret: github_username
