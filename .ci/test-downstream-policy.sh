@@ -71,9 +71,17 @@ assert_contains "$dockerfile" '^ARG GEESEFS_X_CRYPTO_VERSION=v[0-9]+\.[0-9]+\.[0
   'GeeseFS x/crypto security override is pinned'
 assert_contains "$dockerfile" '^ARG GEESEFS_X_NET_VERSION=v[0-9]+\.[0-9]+\.[0-9]+$' \
   'GeeseFS x/net security override is pinned'
+assert_contains "$dockerfile" '^ARG GEESEFS_GRPC_VERSION=v[0-9]+\.[0-9]+\.[0-9]+$' \
+  'GeeseFS gRPC security override is pinned'
+assert_contains "$dockerfile" '^ARG GEESEFS_X_TEXT_VERSION=v[0-9]+\.[0-9]+\.[0-9]+$' \
+  'GeeseFS x/text security override is pinned'
+assert_contains "$dockerfile" '-require=google\.golang\.org/grpc@\$\{GEESEFS_GRPC_VERSION\}' \
+  'GeeseFS build applies the gRPC security override'
+assert_contains "$dockerfile" '-require=golang\.org/x/text@\$\{GEESEFS_X_TEXT_VERSION\}' \
+  'GeeseFS build applies the x/text security override'
 assert_contains "$dockerfile" 'CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build' \
   'GeeseFS is built from verified source'
-assert_contains "$dockerfile" 'main\.Version=\$\{GEESEFS_VERSION\}-ym1' \
+assert_contains "$dockerfile" 'main\.Version=\$\{GEESEFS_VERSION\}-ym2' \
   'GeeseFS embeds the maintained source version'
 assert_contains "$dockerfile" '^ARG RCLONE_VERSION=[0-9]+\.[0-9]+\.[0-9]+-r[0-9]+$' \
   'rclone package version is pinned'
@@ -105,6 +113,10 @@ fi
 assert_file "$renovate" 'Renovate configuration exists'
 assert_contains "$renovate" '"gomod"' 'Renovate enables the gomod manager for go.mod and go.sum'
 assert_contains "$renovate" '"dockerfile"' 'Renovate enables Dockerfile dependency updates'
+assert_contains "$renovate" 'google\\\\\.golang\\\\\.org/grpc' \
+  'Renovate tracks the GeeseFS gRPC security override'
+assert_contains "$renovate" 'golang\\\\\.org/x/text' \
+  'Renovate tracks the GeeseFS x/text security override'
 assert_file "$actions" 'Forgejo Actions validation workflow exists'
 assert_contains "$actions" 'go mod verify' 'Forgejo Actions verifies Go module content'
 assert_contains "$actions" 'go test ./\.\.\. -run' 'Forgejo Actions compiles the complete Go test suite'

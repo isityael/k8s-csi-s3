@@ -44,7 +44,9 @@
       ],
       "matchStrings": [
         "# renovate: datasource=(?<datasource>go) packageName=(?<packageName>golang\\.org/x/crypto)\\nARG GEESEFS_X_CRYPTO_VERSION=(?<currentValue>v[^\\s]+)",
-        "# renovate: datasource=(?<datasource>go) packageName=(?<packageName>golang\\.org/x/net)\\nARG GEESEFS_X_NET_VERSION=(?<currentValue>v[^\\s]+)"
+        "# renovate: datasource=(?<datasource>go) packageName=(?<packageName>golang\\.org/x/net)\\nARG GEESEFS_X_NET_VERSION=(?<currentValue>v[^\\s]+)",
+        "# renovate: datasource=(?<datasource>go) packageName=(?<packageName>google\\.golang\\.org/grpc)\\nARG GEESEFS_GRPC_VERSION=(?<currentValue>v[^\\s]+)",
+        "# renovate: datasource=(?<datasource>go) packageName=(?<packageName>golang\\.org/x/text)\\nARG GEESEFS_X_TEXT_VERSION=(?<currentValue>v[^\\s]+)"
       ]
     }
   ],

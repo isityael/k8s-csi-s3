@@ -25,6 +25,10 @@ ARG GEESEFS_SOURCE_SHA256=66383e8a6162e389037135482e93ebe6d04fb0451f98e081d87b08
 ARG GEESEFS_X_CRYPTO_VERSION=v0.54.0
 # renovate: datasource=go packageName=golang.org/x/net
 ARG GEESEFS_X_NET_VERSION=v0.57.0
+# renovate: datasource=go packageName=google.golang.org/grpc
+ARG GEESEFS_GRPC_VERSION=v1.82.1
+# renovate: datasource=go packageName=golang.org/x/text
+ARG GEESEFS_X_TEXT_VERSION=v0.40.0
 
 RUN apk add --no-cache ca-certificates=20260611-r0 curl=8.21.0-r0 && \
     curl --fail --location --silent --show-error \
@@ -37,9 +41,11 @@ RUN apk add --no-cache ca-certificates=20260611-r0 curl=8.21.0-r0 && \
 WORKDIR /src
 RUN go mod edit \
       -require=golang.org/x/crypto@${GEESEFS_X_CRYPTO_VERSION} \
-      -require=golang.org/x/net@${GEESEFS_X_NET_VERSION} && \
+      -require=golang.org/x/net@${GEESEFS_X_NET_VERSION} \
+      -require=google.golang.org/grpc@${GEESEFS_GRPC_VERSION} \
+      -require=golang.org/x/text@${GEESEFS_X_TEXT_VERSION} && \
     CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -mod=mod -trimpath \
-      -ldflags "-s -w -X main.Version=${GEESEFS_VERSION}-ym1" \
+      -ldflags "-s -w -X main.Version=${GEESEFS_VERSION}-ym2" \
       -o /out/geesefs .
 
 FROM ${RUNTIME_BASE}
