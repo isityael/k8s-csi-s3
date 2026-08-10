@@ -9,6 +9,9 @@ renovate="$repo_root/renovate.json"
 actions="$repo_root/.forgejo/workflows/validate.yaml"
 woodpecker="$repo_root/.woodpecker/release.yaml"
 woodpecker_validate="$repo_root/.woodpecker/validate.yaml"
+release_actions="$repo_root/.forgejo/workflows/release-tag.yaml"
+tag_resolver="$repo_root/hack/next-fork-tag.sh"
+tag_creator="$repo_root/hack/create-forgejo-tag.sh"
 
 passed=0
 failed=0
@@ -123,6 +126,15 @@ assert_contains "$actions" 'go test ./\.\.\. -run' 'Forgejo Actions compiles the
 assert_file "$woodpecker_validate" 'Woodpecker validation pipeline exists'
 assert_contains "$woodpecker_validate" 'make test' 'Woodpecker runs the complete privileged CSI suite'
 assert_file "$woodpecker" 'Woodpecker release pipeline exists'
+assert_file "$release_actions" 'Forgejo automatic release-tag workflow exists'
+assert_file "$tag_resolver" 'deterministic fork-tag resolver exists'
+assert_file "$tag_creator" 'immutable Forgejo tag creator exists'
+assert_contains "$release_actions" 'isityael/dhi-hardening' \
+  'automatic release targets the maintained branch'
+assert_contains "$release_actions" 'github\.server_url.*/api/v1' \
+  'automatic release uses the canonical Forgejo API'
+assert_contains "$release_actions" 'Dockerfile' \
+  'runtime Dockerfile changes trigger automatic release'
 assert_contains "$woodpecker" 'linux/amd64' 'Woodpecker publishes only linux/amd64'
 assert_contains "$woodpecker" 'ghcr\.io/isityael/csi-s3-driver' 'Woodpecker publishes the owned GHCR image'
 assert_contains "$woodpecker" 'COSIGN_EXPERIMENTAL: "1"' 'Woodpecker enables OCI 1.1 Cosign referrers'
