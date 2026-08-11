@@ -8,14 +8,14 @@ when:
 
 services:
   docker:
-    image: docker:29.7.1-dind@sha256:e8faad5a8dc5279dff929afc5449f2791736912fff9f99351d742db2fad01b4c
+    image: docker:29.7.2-dind@sha256:12e683a161823b2a839aeea999b9d960e6e1f9a97b1679ad6b441982e2d9cf07
     privileged: true
     environment:
       DOCKER_TLS_CERTDIR: ""
 
 steps:
   - name: privileged-csi-suite
-    image: docker:29.7.1-cli@sha256:8e7f8c848f46647a532833619f894480f54cd20c0057e1b552d8b46bf3efddb7
+    image: docker:29.7.2-cli@sha256:e650b7a58d7f56be91d4f7be799196380a3bbc1bcbc41f1f4dff1b36ac309e1e
     environment:
       DOCKER_HOST: tcp://docker:2375
     commands:
