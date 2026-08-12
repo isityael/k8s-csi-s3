@@ -24,7 +24,7 @@ ARG GEESEFS_SOURCE_SHA256=66383e8a6162e389037135482e93ebe6d04fb0451f98e081d87b08
 # renovate: datasource=go packageName=golang.org/x/crypto
 ARG GEESEFS_X_CRYPTO_VERSION=v0.54.0
 # renovate: datasource=go packageName=golang.org/x/net
-ARG GEESEFS_X_NET_VERSION=v0.57.0
+ARG GEESEFS_X_NET_VERSION=v0.58.0
 # renovate: datasource=go packageName=google.golang.org/grpc
 ARG GEESEFS_GRPC_VERSION=v1.83.0
 # renovate: datasource=go packageName=golang.org/x/text
