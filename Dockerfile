@@ -26,7 +26,7 @@ ARG GEESEFS_X_CRYPTO_VERSION=v0.55.0
 # renovate: datasource=go packageName=golang.org/x/net
 ARG GEESEFS_X_NET_VERSION=v0.58.0
 # renovate: datasource=go packageName=google.golang.org/grpc
-ARG GEESEFS_GRPC_VERSION=v1.83.0
+ARG GEESEFS_GRPC_VERSION=v1.83.1
 # renovate: datasource=go packageName=golang.org/x/text
 ARG GEESEFS_X_TEXT_VERSION=v0.41.0
 
