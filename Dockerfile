@@ -1,4 +1,4 @@
-ARG GO_BASE=dhi.io/golang:1.26.7-alpine3.24-dev@sha256:0c00bda6cdb72ae77877aae5b9abb1033c34a51bc0aa1e66e5808b864158098b
+ARG GO_BASE=dhi.io/golang:1.27.0-alpine3.24-dev@sha256:2852e3a139abb33e0b609030416a89d69e3f713ab21ed13470fe3efdca791a8c
 ARG RUNTIME_BASE=dhi.io/alpine-base:3.24-dev@sha256:0164533a65c7d2326758ce453d0085a9f6f7542b06a7a3cc9c984a139bd46467
 
 FROM ${GO_BASE} AS gobuild
