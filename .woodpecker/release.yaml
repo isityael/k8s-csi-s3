@@ -36,7 +36,7 @@ steps:
       cache_to: 'type=registry,ref=ghcr.io/isityael/csi-s3-driver:buildcache,mode=max,ignore-error=true'
 
   - name: scan-candidate
-    image: dhi.io/trivy:0.74.0-alpine3.24-dev@sha256:9184af6db53896c118985a308b2232e07f9c246145984dbfe06e4097400f36c6
+    image: dhi.io/trivy:0.74.0-alpine3.24-dev@sha256:608245bee20ddbdb2d67d792ada69bbf37120782d397fc5f88efdf0d347d409c
     environment:
       TRIVY_USERNAME:
         from_secret: github_username
@@ -46,7 +46,7 @@ steps:
       - trivy image --exit-code 1 --severity HIGH,CRITICAL --ignore-unfixed "ghcr.io/isityael/csi-s3-driver:candidate-$${CI_COMMIT_SHA}"
 
   - name: sign-candidate
-    image: dhi.io/cosign:3.1.3-alpine3.24-dev@sha256:ad40a6c94e2972c0a0f760e1fc66bfaf914f4480607d1593009ff1dae1311a3d
+    image: dhi.io/cosign:3.1.3-alpine3.24-dev@sha256:ce8c798a69baf4af447461f4950d2f487a2682cb4bdb03f78427ded2581ae511
     environment:
       COSIGN_EXPERIMENTAL: "1"
       COSIGN_KEY:
