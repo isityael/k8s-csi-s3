@@ -13,7 +13,7 @@ require (
 	github.com/onsi/ginkgo v1.16.5
 	github.com/onsi/gomega v1.42.1
 	google.golang.org/grpc v1.83.2
-	k8s.io/mount-utils v0.36.4
+	k8s.io/mount-utils v0.37.0
 )
 
 require (
