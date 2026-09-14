@@ -65,6 +65,8 @@ assert_not_contains() {
 go_series="$(awk -F'[ .]' '$1 == "go" { print $2 "\\." $3; exit }' "$gomod")"
 assert_contains "$dockerfile" "^ARG GO_BASE=dhi\\.io/golang:${go_series}\\.[0-9]+-alpine3\\.24-dev@sha256:[a-f0-9]{64}$" \
   'builder uses a digest-pinned DHI Go image matching go.mod on Alpine 3.24'
+assert_contains "$repo_root/test/Dockerfile" "^ARG TEST_GO_BASE=golang:${go_series}\\.[0-9]+-alpine3\\.24@sha256:[a-f0-9]{64}$" \
+  'integration tests use a digest-pinned Go image matching go.mod on Alpine 3.24'
 assert_contains "$dockerfile" '^ARG RUNTIME_BASE=dhi\.io/alpine-base:3\.24-dev@sha256:[a-f0-9]{64}$' \
   'runtime uses a digest-pinned DHI Alpine 3.24 dev image'
 assert_contains "$dockerfile" '^ARG GEESEFS_VERSION=v[0-9]+\.[0-9]+\.[0-9]+$' \
