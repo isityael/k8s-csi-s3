@@ -30,7 +30,7 @@ ARG GEESEFS_GRPC_VERSION=v1.83.2
 # renovate: datasource=go packageName=golang.org/x/text
 ARG GEESEFS_X_TEXT_VERSION=v0.42.0
 
-RUN apk add --no-cache ca-certificates=20260611-r0 curl=8.22.0-r0 && \
+RUN apk add --no-cache ca-certificates=20260909-r0 curl=8.22.0-r0 && \
     curl --fail --location --silent --show-error \
       "https://github.com/yandex-cloud/geesefs/archive/refs/tags/${GEESEFS_VERSION}.tar.gz" \
       --output /tmp/geesefs.tar.gz && \
@@ -64,7 +64,7 @@ LABEL org.opencontainers.image.title="k8s-csi-s3" \
 
 RUN apk add --no-cache \
       --repository=https://dl-cdn.alpinelinux.org/alpine/v3.24/community \
-      ca-certificates=20260611-r0 \
+      ca-certificates=20260909-r0 \
       fuse=2.9.9-r7 \
       mailcap=2.1.54-r0 \
       rclone=${RCLONE_VERSION} \
