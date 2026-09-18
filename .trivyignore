@@ -1,0 +1,8 @@
+# CVE-2026-84445 (GHSA-2v4p-qf9q-27wj, grpc-go :authority/host DoS)
+# False positive for google.golang.org/grpc v1.84.0. The advisory was published
+# 2026-09-08, before v1.84.0 was released (2026-09-17), and marks the whole
+# 1.84 dev line vulnerable until 1.85.0-dev. The fix (#9365) was cherry-picked
+# into the release branch as d5a41119e0 "cherry-pick #9365 to v1.84.x (#9370)"
+# and ships in v1.84.0. Expires so it is re-checked once the advisory range is
+# corrected or 1.84.1/1.85.0 is out.
+CVE-2026-84445 exp:2026-10-31

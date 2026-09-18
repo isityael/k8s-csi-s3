@@ -52,7 +52,7 @@ FROM ${RUNTIME_BASE}
 
 ARG IMAGE_VERSION=dev
 ARG VCS_REF=unknown
-ARG RCLONE_VERSION=1.74.1-r1
+ARG RCLONE_VERSION=1.74.1-r2
 ARG S3FS_FUSE_VERSION=1.97-r0
 
 LABEL org.opencontainers.image.title="k8s-csi-s3" \
@@ -62,7 +62,11 @@ LABEL org.opencontainers.image.title="k8s-csi-s3" \
       org.opencontainers.image.revision="${VCS_REF}" \
       org.opencontainers.image.licenses="Apache-2.0"
 
+# Resolve pins against upstream Alpine main *and* community: Renovate proposes
+# these versions from upstream, and the base image's own apk mirror can lag
+# (ca-certificates=20260909-r0 was unresolvable, failing release pipeline 154).
 RUN apk add --no-cache \
+      --repository=https://dl-cdn.alpinelinux.org/alpine/v3.24/main \
       --repository=https://dl-cdn.alpinelinux.org/alpine/v3.24/community \
       ca-certificates=20260909-r0 \
       fuse=2.9.9-r7 \
