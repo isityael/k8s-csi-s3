@@ -18,6 +18,20 @@ steps:
     image: docker:29.8.1-cli@sha256:1b0a4c8c69b84185904584e05e5d3b6e6b5f01d1339dcfbe1cd7dfa5d5ac7543
     environment:
       DOCKER_HOST: tcp://docker:2375
+    # This step is only the docker CLI driving the dind service, which does the
+    # actual build and test. Without explicit resources it inherits the 4Gi
+    # LimitRange default, doubling this workflow's claim on the 32Gi namespace
+    # quota; under Renovate bursts that got the pod rejected outright
+    # ("exceeded quota: woodpecker-quota"), failing tag pipeline 153.
+    backend_options:
+      kubernetes:
+        resources:
+          requests:
+            cpu: 100m
+            memory: 64Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
     commands:
       - apk add --no-cache make
       - until docker info >/dev/null 2>&1; do sleep 1; done
