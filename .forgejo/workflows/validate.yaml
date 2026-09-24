@@ -9,9 +9,11 @@ on:
 
 jobs:
   validate:
-    # Needs a full GNU userland for the Go toolchain and policy script;
-    # ubuntu-latest maps to the slim Alpine job image on our runners.
-    runs-on: ubuntu-26.04
+    # Needs a full GNU userland for the Go toolchain and policy script.
+    # `root01` is the root01-only runner label (catthehacker act-24.04): it
+    # keeps this job off the busy homelab runner, and Renovate does not
+    # rewrite it the way it bumped ubuntu-24.04 to an unserved ubuntu-26.04.
+    runs-on: root01
     timeout-minutes: 30
     steps:
       - name: Check out source
