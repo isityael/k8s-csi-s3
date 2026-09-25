@@ -17,19 +17,17 @@ existing_tag=""
 while IFS= read -r tag; do
   revision=""
   case "${tag}" in
-    "${upstream_version}-ym") revision=1 ;;
-    "${upstream_version}-ym"[0-9]*) revision="${tag#"${upstream_version}-ym"}" ;;
-    "${upstream_version}-ym."[0-9]*) revision="${tag#"${upstream_version}-ym."}" ;;
+    "${upstream_version}-yael."[0-9]*) revision="${tag#"${upstream_version}-yael."}" ;;
   esac
   [[ "${revision}" =~ ^[1-9][0-9]*$ ]] || continue
   ((revision > max_revision)) && max_revision="${revision}"
   if [[ "$(git rev-list -n 1 "${tag}")" == "${target_commit}" ]]; then
     existing_tag="${tag}"
   fi
-done < <(git tag --list "${upstream_version}-ym*")
+done < <(git tag --list "${upstream_version}-yael.*")
 
 if [[ -n "${existing_tag}" ]]; then
   printf 'tag=%s\ncreate=false\n' "${existing_tag}"
 else
-  printf 'tag=%s-ym.%d\ncreate=true\n' "${upstream_version}" "$((max_revision + 1))"
+  printf 'tag=%s-yael.%d\ncreate=true\n' "${upstream_version}" "$((max_revision + 1))"
 fi

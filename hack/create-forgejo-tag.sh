@@ -12,7 +12,7 @@ commit="$2"
 : "${FORGEJO_REPOSITORY:?FORGEJO_REPOSITORY is required}"
 : "${FORGEJO_TOKEN:?FORGEJO_TOKEN is required}"
 
-[[ "${tag}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+-ym\.[1-9][0-9]*$ ]] || {
+[[ "${tag}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+-yael\.[1-9][0-9]*$ ]] || {
   printf 'refusing non-canonical release tag: %s\n' "${tag}" >&2
   exit 2
 }

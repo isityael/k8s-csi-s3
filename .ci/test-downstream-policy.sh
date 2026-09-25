@@ -87,7 +87,7 @@ assert_contains "$dockerfile" '-require=golang\.org/x/text@\$\{GEESEFS_X_TEXT_VE
   'GeeseFS build applies the x/text security override'
 assert_contains "$dockerfile" 'CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build' \
   'GeeseFS is built from verified source'
-assert_contains "$dockerfile" 'main\.Version=\$\{GEESEFS_VERSION\}-ym2' \
+assert_contains "$dockerfile" 'main\.Version=\$\{GEESEFS_VERSION\}-yael\.2' \
   'GeeseFS embeds the maintained source version'
 assert_contains "$dockerfile" '^ARG RCLONE_VERSION=[0-9]+\.[0-9]+\.[0-9]+-r[0-9]+$' \
   'rclone package version is pinned'
@@ -149,6 +149,14 @@ if [ -n "$sign_line" ] && [ -n "$promote_line" ] && [ "$sign_line" -lt "$promote
   pass 'Woodpecker signs before publishing release tags'
 else
   fail 'Woodpecker signs before publishing release tags'
+fi
+
+assert_contains "$woodpecker" 'refs/tags/v\*-yael\.\*' 'release pipeline triggers on -yael tags'
+assert_contains "$tag_resolver" '-yael\.%d' 'fork releases are named v<geesefs>-yael.<n>'
+if grep -Eq -- '-ym([0-9.*"]|$)' "$woodpecker" "$woodpecker_validate" "$tag_resolver" "$tag_creator" "$dockerfile"; then
+  fail 'no -ym release naming remains'
+else
+  pass 'no -ym release naming remains'
 fi
 
 printf '\nPolicy checks: %s passed, %s failed\n' "$passed" "$failed"

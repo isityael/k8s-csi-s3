@@ -45,7 +45,7 @@ RUN go mod edit \
       -require=google.golang.org/grpc@${GEESEFS_GRPC_VERSION} \
       -require=golang.org/x/text@${GEESEFS_X_TEXT_VERSION} && \
     CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -mod=mod -trimpath \
-      -ldflags "-s -w -X main.Version=${GEESEFS_VERSION}-ym2" \
+      -ldflags "-s -w -X main.Version=${GEESEFS_VERSION}-yael.2" \
       -o /out/geesefs .
 
 FROM ${RUNTIME_BASE}

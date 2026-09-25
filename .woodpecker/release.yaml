@@ -1,6 +1,6 @@
 when:
   - event: tag
-    ref: refs/tags/v*-ym*
+    ref: refs/tags/v*-yael.*
 
 depends_on:
   - validate

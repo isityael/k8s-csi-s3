@@ -3,7 +3,7 @@ when:
   - event: push
     branch: isityael/dhi-hardening
   - event: tag
-    ref: refs/tags/v*-ym*
+    ref: refs/tags/v*-yael.*
   - event: manual
 
 services:
