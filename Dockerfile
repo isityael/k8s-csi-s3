@@ -28,7 +28,7 @@ ARG GEESEFS_X_NET_VERSION=v0.59.0
 # renovate: datasource=go packageName=google.golang.org/grpc
 ARG GEESEFS_GRPC_VERSION=v1.84.0
 # renovate: datasource=go packageName=golang.org/x/text
-ARG GEESEFS_X_TEXT_VERSION=v0.42.0
+ARG GEESEFS_X_TEXT_VERSION=v0.43.0
 
 RUN apk add --no-cache ca-certificates=20260909-r0 curl=8.22.0-r0 && \
     curl --fail --location --silent --show-error \
