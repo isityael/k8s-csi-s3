@@ -8,14 +8,14 @@ when:
 
 services:
   docker:
-    image: docker:29.8.2-dind@sha256:7dcdfc4a20246236f558175182ccace1eb15a41bd3eb119dd2284f393498b7c1
+    image: docker:29.9.0-dind@sha256:0b6d18a4a222e71c88be6034926b4f6cde2fc33c2218643d03ccfddc65995470
     privileged: true
     environment:
       DOCKER_TLS_CERTDIR: ""
 
 steps:
   - name: privileged-csi-suite
-    image: docker:29.8.2-cli@sha256:b0dfb3beea69612ccf1f9cfd8f74179b9c497d6b0c9e1294664dffe9bc1c070a
+    image: docker:29.9.0-cli@sha256:4caa52207e95c68c3087006eefb3a5f6ca48ad1c0ba3aa3e6843549a0720b7bb
     environment:
       DOCKER_HOST: tcp://docker:2375
       # The test image copies MinIO from dhi.io.
