@@ -22,7 +22,7 @@ FROM ${GO_BASE} AS geesefs
 ARG GEESEFS_VERSION=v0.43.9
 ARG GEESEFS_SOURCE_SHA256=beee3771a2bbe652c49f9e8048b4f3e1ef2f606432d496e8de574c9355cb2dee
 # renovate: datasource=go packageName=golang.org/x/crypto
-ARG GEESEFS_X_CRYPTO_VERSION=v0.57.0
+ARG GEESEFS_X_CRYPTO_VERSION=v0.58.0
 # renovate: datasource=go packageName=golang.org/x/net
 ARG GEESEFS_X_NET_VERSION=v0.61.0
 # renovate: datasource=go packageName=google.golang.org/grpc
