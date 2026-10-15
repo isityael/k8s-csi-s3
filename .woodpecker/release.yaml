@@ -36,7 +36,7 @@ steps:
       cache_to: 'type=registry,ref=ghcr.io/isityael/csi-s3-driver:buildcache,mode=max,ignore-error=true'
 
   - name: scan-candidate
-    image: dhi.io/trivy:0.74.0-alpine3.24-dev@sha256:235b717b2eaba904ef093ea5c888bc93bf373ce47906442bc02509a268eeff10
+    image: dhi.io/trivy:0.74.0-alpine3.24-dev@sha256:0ccc6d380d9bbda6de62735e4ff5f210f6f82c6cd82afd01167781f9a0dba053
     environment:
       TRIVY_USERNAME:
         from_secret: github_username
