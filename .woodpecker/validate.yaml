@@ -15,7 +15,7 @@ services:
 
 steps:
   - name: privileged-csi-suite
-    image: docker:29.9.0-cli@sha256:4caa52207e95c68c3087006eefb3a5f6ca48ad1c0ba3aa3e6843549a0720b7bb
+    image: docker:29.9.0-cli@sha256:1a4c7cb63513f349bdad01fcc6e0f3f2f67d37b9da86f14dc0d4a0942eecda00
     environment:
       DOCKER_HOST: tcp://docker:2375
       # The test image copies MinIO from dhi.io.
