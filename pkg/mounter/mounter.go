@@ -72,10 +72,10 @@ func fuseMount(path string, command string, args []string, envs []string) error 
 }
 
 func Unmount(path string) error {
-	if err := mount.New("").Unmount(path); err != nil {
-		return err
-	}
-	return nil
+	// CSI unpublish must also succeed when the target is already absent or
+	// unmounted. The extensive check detects same-filesystem bind mounts;
+	// cleanup only removes the mountpoint after a successful unmount.
+	return mount.CleanupMountPoint(path, mount.New(""), true)
 }
 
 func SystemdUnmount(volumeID string) (bool, error) {

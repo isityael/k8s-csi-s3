@@ -5,18 +5,22 @@ import (
 	"os"
 
 	"github.com/isityael/k8s-csi-s3/pkg/driver"
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
-	"github.com/kubernetes-csi/csi-test/pkg/sanity"
+	"github.com/kubernetes-csi/csi-test/v5/pkg/sanity"
 )
 
-// Ensure IDGen is initialized for all test configs
-func initSanityConfig(cfg *sanity.Config) *sanity.Config {
-	if cfg.IDGen == nil {
-		cfg.IDGen = &sanity.DefaultIDGenerator{}
-	}
-	return cfg
+// Start with the library defaults, including gRPC transport credentials and
+// timeout/volume settings, then apply this suite's endpoint and fixture paths.
+func initSanityConfig(cfg *sanity.TestConfig) *sanity.TestConfig {
+	defaults := sanity.NewTestConfig()
+	defaults.TargetPath = cfg.TargetPath
+	defaults.StagingPath = cfg.StagingPath
+	defaults.Address = cfg.Address
+	defaults.SecretsFile = cfg.SecretsFile
+	defaults.TestVolumeParameters = cfg.TestVolumeParameters
+	return &defaults
 }
 
 var _ = Describe("S3Driver", func() {
@@ -34,7 +38,7 @@ var _ = Describe("S3Driver", func() {
 		go driver.Run()
 
 		Describe("CSI sanity", func() {
-			sanityCfg := initSanityConfig(&sanity.Config{
+			sanityCfg := initSanityConfig(&sanity.TestConfig{
 				TargetPath:  os.TempDir() + "/geesefs-target",
 				StagingPath: os.TempDir() + "/geesefs-staging",
 				Address:     csiEndpoint,
@@ -61,7 +65,7 @@ var _ = Describe("S3Driver", func() {
 		go driver.Run()
 
 		Describe("CSI sanity", func() {
-			sanityCfg := initSanityConfig(&sanity.Config{
+			sanityCfg := initSanityConfig(&sanity.TestConfig{
 				TargetPath:  os.TempDir() + "/geesefs-no-bucket-target",
 				StagingPath: os.TempDir() + "/geesefs-no-bucket-staging",
 				Address:     csiEndpoint,
@@ -88,7 +92,7 @@ var _ = Describe("S3Driver", func() {
 			go driver.Run()
 
 			Describe("CSI sanity", func() {
-				sanityCfg := &sanity.Config{
+				sanityCfg := &sanity.TestConfig{
 					TargetPath:  os.TempDir() + "/s3fs-target",
 					StagingPath: os.TempDir() + "/s3fs-staging",
 					Address:     csiEndpoint,
@@ -116,7 +120,7 @@ var _ = Describe("S3Driver", func() {
 			go driver.Run()
 
 			Describe("CSI sanity", func() {
-				sanityCfg := &sanity.Config{
+				sanityCfg := &sanity.TestConfig{
 					TargetPath:  os.TempDir() + "/rclone-target",
 					StagingPath: os.TempDir() + "/rclone-staging",
 					Address:     csiEndpoint,
