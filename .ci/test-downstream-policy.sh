@@ -139,7 +139,7 @@ assert_contains "$release_actions" 'github\.server_url.*/api/v1' \
 assert_contains "$release_actions" 'Dockerfile' \
   'runtime Dockerfile changes trigger automatic release'
 assert_contains "$woodpecker" 'linux/amd64' 'Woodpecker publishes only linux/amd64'
-assert_contains "$woodpecker" 'ghcr\.io/isityael/csi-s3-driver' 'Woodpecker publishes the owned GHCR image'
+assert_contains "$woodpecker" 'git\.m0sh1\.cc/isityael/csi-s3-driver' 'Woodpecker publishes the owned Forgejo image'
 assert_contains "$woodpecker" 'COSIGN_EXPERIMENTAL: "1"' 'Woodpecker enables OCI 1.1 Cosign referrers'
 assert_contains "$woodpecker" 'cosign verify .*--experimental-oci11' \
   'Woodpecker verifies the candidate signature through OCI 1.1 referrers'
