@@ -76,7 +76,7 @@ spec:
           operator: Exists
       containers:
         - name: csi-provisioner
-          image: cr.yandex/crp9ftr22d26age3hulg/yandex-cloud/csi-s3/csi-provisioner:v6.2.0
+          image: dhi.io/csi-provisioner:6.2.0-debian13-dev
           args:
             - "--csi-address=$(ADDRESS)"
             - "--v=4"

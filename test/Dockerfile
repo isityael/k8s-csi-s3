@@ -1,6 +1,6 @@
-ARG TEST_GO_BASE=golang:1.27.2-alpine3.24@sha256:f92b6ef800e499660581efdabdf25d9d817a9d124eaf900924f0504e7e27e12d
+ARG TEST_GO_BASE=dhi.io/golang:1.27.2-alpine3.24-dev
 # MinIO no longer publishes public images; DHI builds it (static binary).
-ARG MINIO_IMAGE=dhi.io/minio:0.20251015.172955-debian13@sha256:2156f0e55fbc8003f95b9563b37e854c7b2c88d498f0f033856df7a5fbf61701
+ARG MINIO_IMAGE=dhi.io/minio:0.20251015.172955-debian13
 
 FROM ${MINIO_IMAGE} AS minio
 
