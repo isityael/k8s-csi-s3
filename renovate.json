@@ -53,19 +53,56 @@
   "packageRules": [
     {
       "description": "Label Go dependency updates",
-      "matchManagers": ["gomod"],
-      "addLabels": ["dependencies", "go"],
+      "matchManagers": [
+        "gomod"
+      ],
+      "addLabels": [
+        "dependencies",
+        "go"
+      ],
       "constraintsFiltering": "strict"
     },
     {
       "description": "Keep Docker and CI updates reviewable",
-      "matchManagers": ["dockerfile", "github-actions", "woodpecker", "custom.regex"],
-      "addLabels": ["dependencies", "supply-chain"]
+      "matchManagers": [
+        "dockerfile",
+        "github-actions",
+        "woodpecker",
+        "custom.regex"
+      ],
+      "addLabels": [
+        "dependencies",
+        "supply-chain"
+      ]
     },
     {
       "description": "Group Forgejo Actions updates",
-      "matchManagers": ["github-actions"],
+      "matchManagers": [
+        "github-actions"
+      ],
       "groupName": "forgejo actions"
+    },
+    {
+      "description": "Use container version tags only.",
+      "matchDatasources": [
+        "docker"
+      ],
+      "pinDigests": false
+    },
+    {
+      "description": "Do not create container digest pins or digest refreshes.",
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchUpdateTypes": [
+        "digest",
+        "pinDigest"
+      ],
+      "enabled": false
     }
+  ],
+  "pinDigests": false,
+  "ignorePresets": [
+    "docker:pinDigests"
   ]
 }

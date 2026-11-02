@@ -8,14 +8,15 @@ when:
 
 services:
   docker:
-    image: docker:29.9.2-dind@sha256:9e79b879b177fbd72c34376a3dd3d91747da5db49e1f560f76aea59561471977
+    image: dhi.io/docker-dind:29.9.2-alpine3.24-dev
     privileged: true
+    entrypoint: ["dockerd-entrypoint.sh", "--storage-driver=vfs"]
     environment:
       DOCKER_TLS_CERTDIR: ""
 
 steps:
   - name: privileged-csi-suite
-    image: docker:29.9.2-cli@sha256:5e6baf67325a79f64ed3bed6863954d5e05d0f3d4e57cbdb14809346814bbfdb
+    image: dhi.io/docker:29.9.2-debian13-cli-dev
     environment:
       DOCKER_HOST: tcp://docker:2375
       # The test image copies MinIO from dhi.io.
@@ -38,7 +39,7 @@ steps:
             cpu: 500m
             memory: 512Mi
     commands:
-      - apk add --no-cache make
+      - apt-get update && apt-get install -y --no-install-recommends make git && rm -rf /var/lib/apt/lists/*
       - until docker info >/dev/null 2>&1; do sleep 1; done
       - printf '%s' "$${DHI_PASSWORD}" | docker login dhi.io -u "$${DHI_USERNAME}" --password-stdin
       - make test
