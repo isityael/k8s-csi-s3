@@ -10,6 +10,7 @@ services:
   docker:
     image: dhi.io/docker-dind:29.9.2-alpine3.24-dev
     privileged: true
+    commands: ["exec dockerd-entrypoint.sh --storage-driver=vfs"]
     environment:
       DOCKER_TLS_CERTDIR: ""
 
@@ -38,7 +39,7 @@ steps:
             cpu: 500m
             memory: 512Mi
     commands:
-      - apt-get update && apt-get install -y --no-install-recommends make && rm -rf /var/lib/apt/lists/*
+      - apt-get update && apt-get install -y --no-install-recommends make git && rm -rf /var/lib/apt/lists/*
       - until docker info >/dev/null 2>&1; do sleep 1; done
       - printf '%s' "$${DHI_PASSWORD}" | docker login dhi.io -u "$${DHI_USERNAME}" --password-stdin
       - make test
