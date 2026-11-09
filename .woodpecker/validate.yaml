@@ -8,7 +8,7 @@ when:
 
 services:
   docker:
-    image: dhi.io/docker-dind:29.9.2-alpine3.24-dev
+    image: dhi.io/docker-dind:29.9.3-alpine3.24-dev
     privileged: true
     entrypoint: ["dockerd-entrypoint.sh", "--storage-driver=vfs"]
     environment:
