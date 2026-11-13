@@ -1,4 +1,4 @@
-ARG GO_BASE=dhi.io/golang:1.27.3-alpine3.24-dev
+ARG GO_BASE=dhi.io/golang:1.27.4-alpine3.24-dev
 ARG RUNTIME_BASE=dhi.io/alpine-base:3.24-dev
 
 FROM ${GO_BASE} AS gobuild
@@ -22,13 +22,13 @@ FROM ${GO_BASE} AS geesefs
 ARG GEESEFS_VERSION=v0.43.9
 ARG GEESEFS_SOURCE_SHA256=beee3771a2bbe652c49f9e8048b4f3e1ef2f606432d496e8de574c9355cb2dee
 # renovate: datasource=go packageName=golang.org/x/crypto
-ARG GEESEFS_X_CRYPTO_VERSION=v0.58.0
+ARG GEESEFS_X_CRYPTO_VERSION=v0.59.0
 # renovate: datasource=go packageName=golang.org/x/net
-ARG GEESEFS_X_NET_VERSION=v0.61.0
+ARG GEESEFS_X_NET_VERSION=v0.62.0
 # renovate: datasource=go packageName=google.golang.org/grpc
 ARG GEESEFS_GRPC_VERSION=v1.85.0
 # renovate: datasource=go packageName=golang.org/x/text
-ARG GEESEFS_X_TEXT_VERSION=v0.43.0
+ARG GEESEFS_X_TEXT_VERSION=v0.44.0
 
 RUN apk add --no-cache ca-certificates=20260909-r0 curl=8.22.0-r0 && \
     curl --fail --location --silent --show-error \
