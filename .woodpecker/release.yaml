@@ -36,7 +36,7 @@ steps:
       cache_to: 'type=registry,ref=git.m0sh1.cc/isityael/csi-s3-driver:buildcache,mode=max,ignore-error=true'
 
   - name: scan-candidate
-    image: dhi.io/trivy:0.74.0-alpine3.24-dev
+    image: aquasec/trivy:0.76.2
     environment:
       TRIVY_USERNAME:
         from_secret: forgejo_public_package_username
